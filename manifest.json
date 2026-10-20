@@ -1,0 +1,10 @@
+{
+  "display_name": "记忆助手",
+  "loading_order": 100,
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "author": "Kimi",
+  "version": "1.0.0",
+  "auto_update": false
+}
