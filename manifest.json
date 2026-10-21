@@ -1,10 +1,11 @@
 {
-  "display_name": "记忆助手",
-  "loading_order": 100,
-  "requires": [],
-  "optional": [],
-  "js": "index.js",
-  "author": "Kimi",
-  "version": "1.0.0",
-  "auto_update": false
+    "name": "st-character-memory",
+    "display_name": "人物记忆库",
+    "version": "1.0.0",
+    "author": "memory-plugin",
+    "description": "非剧情记忆存储：人物特征、物品、环境、社会结构的自动提取与注入，支持副API、自定义类目与注入规则，手机端优化。",
+    "loading_order": 100,
+    "js": "index.js",
+    "css": "style.css",
+    "auto_update": false
 }

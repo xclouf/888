@@ -1,0 +1,356 @@
+/* ==========================================================================
+   人物记忆库 · 样式（手机端优化：悬浮球 + 半屏抽屉）
+   ========================================================================== */
+
+:root {
+    --stmem-bg: #171a21;
+    --stmem-bg2: #1f232e;
+    --stmem-bg3: #262b38;
+    --stmem-line: #333a4a;
+    --stmem-text: #e6e9f0;
+    --stmem-dim: #9aa3b5;
+    --stmem-accent: #6c8cff;
+    --stmem-accent2: #8b6cff;
+    --stmem-danger: #ff6c6c;
+    --stmem-ok: #59c98a;
+    --stmem-warn: #e8b34b;
+    --stmem-radius: 12px;
+}
+
+/* ---------- 悬浮球 ---------- */
+#stmem-ball {
+    position: fixed;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--stmem-accent), var(--stmem-accent2));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 10000;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    opacity: .92;
+}
+#stmem-ball:active { opacity: 1; }
+#stmem-ball .stmem-ball-dot {
+    position: absolute;
+    top: 2px; right: 2px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--stmem-ok);
+    border: 2px solid #fff;
+    display: none;
+}
+#stmem-ball.stmem-busy .stmem-ball-dot { display: block; animation: stmem-blink 1s infinite; }
+@keyframes stmem-blink { 50% { opacity: .2; } }
+
+/* ---------- 遮罩 ---------- */
+#stmem-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+}
+#stmem-backdrop.stmem-open { opacity: 1; pointer-events: auto; }
+
+/* ---------- 抽屉 ---------- */
+#stmem-drawer {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 74vh;
+    background: var(--stmem-bg);
+    border-radius: 16px 16px 0 0;
+    border-top: 1px solid var(--stmem-line);
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(105%);
+    transition: transform .25s ease;
+    color: var(--stmem-text);
+    font-size: 14px;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, .5);
+}
+#stmem-drawer.stmem-open { transform: translateY(0); }
+
+.stmem-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--stmem-line);
+    flex: 0 0 auto;
+}
+.stmem-header .stmem-title { font-weight: 700; font-size: 15px; flex: 1 1 auto; }
+.stmem-header .stmem-grip {
+    position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
+    width: 40px; height: 4px; border-radius: 2px; background: var(--stmem-line);
+}
+
+/* ---------- 标签页 ---------- */
+.stmem-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 4px;
+    padding: 8px 10px 4px;
+    border-bottom: 1px solid var(--stmem-line);
+    flex: 0 0 auto;
+    scrollbar-width: none;
+}
+.stmem-tabs::-webkit-scrollbar { display: none; }
+.stmem-tab {
+    flex: 0 0 auto;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--stmem-bg2);
+    color: var(--stmem-dim);
+    border: 1px solid var(--stmem-line);
+    font-size: 13px;
+    white-space: nowrap;
+}
+.stmem-tab.stmem-active {
+    background: var(--stmem-accent);
+    border-color: var(--stmem-accent);
+    color: #fff;
+}
+
+/* ---------- 主体 ---------- */
+.stmem-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 10px 12px calc(14px + env(safe-area-inset-bottom));
+    -webkit-overflow-scrolling: touch;
+}
+
+.stmem-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.stmem-toolbar .stmem-spacer { flex: 1 1 auto; }
+
+/* ---------- 通用控件 ---------- */
+#stmem-drawer button, .stmem-btn {
+    background: var(--stmem-bg3);
+    color: var(--stmem-text);
+    border: 1px solid var(--stmem-line);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+#stmem-drawer button:active { filter: brightness(1.25); }
+.stmem-btn-primary { background: var(--stmem-accent) !important; border-color: var(--stmem-accent) !important; color: #fff !important; }
+.stmem-btn-danger { color: var(--stmem-danger) !important; border-color: var(--stmem-danger) !important; }
+.stmem-btn-mini { padding: 3px 8px !important; font-size: 12px !important; border-radius: 6px !important; }
+
+#stmem-drawer input[type="text"],
+#stmem-drawer input[type="number"],
+#stmem-drawer input[type="password"],
+#stmem-drawer input[type="url"],
+#stmem-drawer select,
+#stmem-drawer textarea {
+    background: var(--stmem-bg2);
+    color: var(--stmem-text);
+    border: 1px solid var(--stmem-line);
+    border-radius: 8px;
+    padding: 7px 9px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+}
+#stmem-drawer textarea { min-height: 58px; resize: vertical; font-family: inherit; }
+#stmem-drawer input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--stmem-accent); vertical-align: middle; }
+
+.stmem-row { display: flex; gap: 8px; align-items: center; }
+.stmem-row > * { flex: 1 1 0; min-width: 0; }
+.stmem-row > .stmem-fix { flex: 0 0 auto; }
+
+/* ---------- 卡片 / 条目 ---------- */
+.stmem-card {
+    background: var(--stmem-bg2);
+    border: 1px solid var(--stmem-line);
+    border-radius: var(--stmem-radius);
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+.stmem-card h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.stmem-card h4 .stmem-mini-actions { margin-left: auto; display: flex; gap: 6px; }
+.stmem-card .stmem-sub { color: var(--stmem-dim); font-size: 12px; margin-top: 2px; }
+
+.stmem-item {
+    background: var(--stmem-bg2);
+    border: 1px solid var(--stmem-line);
+    border-radius: var(--stmem-radius);
+    padding: 9px 11px;
+    margin-bottom: 8px;
+}
+.stmem-item .stmem-item-head {
+    display: flex; align-items: center; gap: 8px;
+}
+.stmem-item .stmem-item-name { font-weight: 600; flex: 1 1 auto; word-break: break-all; }
+.stmem-item .stmem-item-body { margin-top: 6px; color: var(--stmem-text); }
+.stmem-item .stmem-kv { margin: 3px 0; font-size: 13px; }
+.stmem-item .stmem-kv b { color: var(--stmem-dim); font-weight: 500; margin-right: 4px; }
+
+.stmem-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--stmem-bg3);
+    border: 1px solid var(--stmem-line);
+    border-radius: 999px;
+    padding: 4px 8px 4px 10px;
+    margin: 3px 4px 3px 0;
+    font-size: 12.5px;
+    max-width: 100%;
+}
+.stmem-chip span { word-break: break-all; }
+.stmem-chip .stmem-x {
+    color: var(--stmem-dim);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0 2px;
+}
+.stmem-chip .stmem-x:hover { color: var(--stmem-danger); }
+
+.stmem-add-row { display: flex; gap: 6px; margin-top: 6px; }
+.stmem-add-row input { flex: 1 1 auto; }
+.stmem-add-row button { flex: 0 0 auto; }
+
+.stmem-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--stmem-line);
+    color: var(--stmem-dim);
+}
+.stmem-badge.stmem-b-warn { color: var(--stmem-warn); border-color: var(--stmem-warn); }
+.stmem-badge.stmem-b-ok { color: var(--stmem-ok); border-color: var(--stmem-ok); }
+
+.stmem-empty {
+    text-align: center;
+    color: var(--stmem-dim);
+    padding: 26px 10px;
+    font-size: 13px;
+}
+
+/* ---------- 表单 ---------- */
+.stmem-field { margin-bottom: 10px; }
+.stmem-field > label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--stmem-dim);
+    margin-bottom: 4px;
+}
+.stmem-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    font-size: 13.5px;
+}
+.stmem-check span { flex: 1 1 auto; }
+.stmem-hint { font-size: 12px; color: var(--stmem-dim); margin-top: 3px; line-height: 1.5; }
+.stmem-hr { border: none; border-top: 1px solid var(--stmem-line); margin: 14px 0; }
+
+/* ---------- 规则编辑面板 ---------- */
+.stmem-rulepanel {
+    background: var(--stmem-bg3);
+    border: 1px solid var(--stmem-accent);
+    border-radius: var(--stmem-radius);
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+
+/* ---------- 报错 ---------- */
+.stmem-err {
+    border-left: 3px solid var(--stmem-danger);
+    background: var(--stmem-bg2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+}
+.stmem-err .stmem-err-type { color: var(--stmem-danger); font-weight: 600; }
+.stmem-err .stmem-err-time { color: var(--stmem-dim); font-size: 11px; margin-left: 6px; }
+.stmem-err pre {
+    margin: 6px 0 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--stmem-dim);
+    font-size: 11.5px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+/* ---------- 统计 ---------- */
+.stmem-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.stmem-stat {
+    background: var(--stmem-bg2);
+    border: 1px solid var(--stmem-line);
+    border-radius: var(--stmem-radius);
+    padding: 10px 12px;
+}
+.stmem-stat .stmem-stat-num { font-size: 20px; font-weight: 700; }
+.stmem-stat .stmem-stat-label { font-size: 12px; color: var(--stmem-dim); margin-top: 2px; }
+
+.stmem-progress {
+    height: 8px;
+    background: var(--stmem-bg3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+.stmem-progress > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--stmem-accent), var(--stmem-accent2));
+    width: 0;
+    transition: width .2s;
+}
+
+/* ---------- 建议修改 ---------- */
+.stmem-suggest {
+    border: 1px dashed var(--stmem-warn);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 8px 0;
+    font-size: 12.5px;
+}
+.stmem-suggest .stmem-suggest-old { color: var(--stmem-danger); text-decoration: line-through; }
+.stmem-suggest .stmem-suggest-new { color: var(--stmem-ok); }
+.stmem-suggest .stmem-suggest-reason { color: var(--stmem-dim); font-size: 11.5px; margin: 4px 0; }
+
+/* ---------- 桌面端微调 ---------- */
+@media (min-width: 720px) {
+    #stmem-drawer {
+        left: auto;
+        right: 16px;
+        width: 460px;
+        border-radius: 16px;
+        bottom: 16px;
+        height: 70vh;
+        border: 1px solid var(--stmem-line);
+    }
+}
